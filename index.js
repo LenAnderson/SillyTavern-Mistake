@@ -9,7 +9,7 @@ const init = async()=>{
         },
     );
     if (!response.ok) {
-        console.error('[MISTKAE]', `${response.status} - ${response.statusText}`);
+        console.error('[MISTAKE]', `${response.status} - ${response.statusText}`);
     }
     const con = new AudioContext();
     const buffer = await con.decodeAudioData(await response.arrayBuffer());
@@ -18,7 +18,7 @@ const init = async()=>{
     volume.connect(con.destination);
     const originalError = toastr.error;
     toastr.error = function(...args) {
-        if (!isPlaying) {
+        if (!isPlaying && args[0] && ((typeof args[0] == 'string' && args[0].length > 0) || args[0] instanceof jQuery)) {
             isPlaying = true;
             const src = con.createBufferSource();
             src.buffer = buffer;
